@@ -50,9 +50,10 @@ func (s *Session) handlePacket(pkt []byte) error {
 	bf := byteframe.NewByteFrameFromBytes(pkt)
 	reqType := string(bf.ReadNullTerminatedBytes())
 	switch reqType {
-	case "DLTSKEYSIGN:100":
-		fallthrough
-	case "DSGN:100":
+	case
+		"DLTSKEYSIGN:100",
+		"DSGN:100",
+		"VITASGN:100":
 		err := s.handleDSGNRequest(bf)
 		if err != nil {
 			return nil
