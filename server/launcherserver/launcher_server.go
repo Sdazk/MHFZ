@@ -3,7 +3,9 @@ package launcherserver
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"sync"
 	"time"
@@ -62,7 +64,11 @@ func (s *Server) Start() error {
 	}
 
 	s.httpServer.Addr = fmt.Sprintf(":%d", s.erupeConfig.Launcher.Port)
-	s.httpServer.Handler = handlers.LoggingHandler(os.Stdout, r)
+	//s.httpServer.Handler = handlers.LoggingHandler(os.Stdout, r)
+	s.httpServer.Handler = handlers.CustomLoggingHandler(os.Stdout, r, func(writer io.Writer, params handlers.LogFormatterParams) {
+		dump, _ := httputil.DumpRequest(params.Request, true)
+		writer.Write(dump)
+	})
 
 	serveError := make(chan error, 1)
 	go func() {
