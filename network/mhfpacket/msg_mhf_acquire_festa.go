@@ -6,7 +6,14 @@ import (
 )
 
 // MsgMhfAcquireFesta represents the MSG_MHF_ACQUIRE_FESTA
-type MsgMhfAcquireFesta struct{}
+type MsgMhfAcquireFesta struct {
+	AckHandle uint32
+	Unk0      uint32
+	Unk1      uint32
+	Unk2      uint32
+	Unk3      uint8
+	Unk4      uint8 // Hardcoded 0 in binary.
+}
 
 // Opcode returns the ID associated with this packet type.
 func (m *MsgMhfAcquireFesta) Opcode() network.PacketID {
