@@ -26,6 +26,10 @@
         "port": 80,
         "UseOriginalLauncherFiles": false
     },
+    "dns": {
+        "port": 53,
+        "foward_to": "8.8.8.8:53"
+    },
     "sign": {
         "port": 53312
     },
@@ -83,6 +87,318 @@
                         "Unk10": 318,
                         "Unk11": 251,
                         "Unk12": 155,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 1",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 1,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 2",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 2,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 4",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 4,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 8",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 8,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 16",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 16,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 32",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 32,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 64",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 64,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 128",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 128,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 256",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 256,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 512",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 512,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 1024",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 1024,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
+                        "Unk13": 12345
+                    }
+                ]
+            },
+            {
+                "name": "AErupe Test Flags 2048",
+                "ip": "127.0.0.1",
+                "unk2": 0,
+                "type": 3,
+                "season": 0,
+                "unk6": 0,
+                "allowedclientflags": 2048,
+                "channels": [
+                    {
+                        "port": 54001,
+                        "MaxPlayers": 10,
+                        "CurrentPlayers": 0,
+                        "Unk4": 0,
+                        "Unk5": 0,
+                        "Unk6": 0,
+                        "Unk7": 0,
+                        "Unk8": 0,
+                        "Unk9": 0,
+                        "Unk10": 319,
+                        "Unk11": 248,
+                        "Unk12": 159,
                         "Unk13": 12345
                     }
                 ]

@@ -16,6 +16,7 @@ type Config struct {
 	DevModeOptions DevModeOptions
 	Discord        Discord
 	Database       Database
+	DNS            DNS
 	Launcher       Launcher
 	Sign           Sign
 	Channel        Channel
@@ -50,6 +51,12 @@ type Database struct {
 	User     string
 	Password string
 	Database string
+}
+
+// DNS holds the DNS server config.
+type DNS struct {
+	Port      int
+	ForwardTo string `mapstructure:"forward_to"`
 }
 
 // Launcher holds the launcher server config.

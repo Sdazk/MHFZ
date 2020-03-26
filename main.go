@@ -9,6 +9,7 @@ import (
 
 	"github.com/Andoryuuta/Erupe/config"
 	"github.com/Andoryuuta/Erupe/server/channelserver"
+	"github.com/Andoryuuta/Erupe/server/dnsserver"
 	"github.com/Andoryuuta/Erupe/server/entranceserver"
 	"github.com/Andoryuuta/Erupe/server/launcherserver"
 	"github.com/Andoryuuta/Erupe/server/signserver"
@@ -69,6 +70,18 @@ func main() {
 	}
 
 	// Now start our server(s).
+
+	// DNS server.
+	dnsServer := dnsserver.NewServer(
+		&dnsserver.Config{
+			Logger:      logger.Named("DNS"),
+			ErupeConfig: erupeConfig,
+		})
+	err = dnsServer.Start()
+	if err != nil {
+		logger.Fatal("Failed to start DNS server", zap.Error(err))
+	}
+	logger.Info("Started DNS server.")
 
 	// Launcher HTTP server.
 	launcherServer := launcherserver.NewServer(
@@ -134,6 +147,7 @@ func main() {
 	signServer.Shutdown()
 	entranceServer.Shutdown()
 	launcherServer.Shutdown()
+	dnsServer.Shutdown()
 
 	time.Sleep(1 * time.Second)
 }
