@@ -3,6 +3,7 @@ package signserver
 import (
 	"database/sql"
 	"encoding/hex"
+	"io/ioutil"
 	"net"
 	"sync"
 
@@ -52,12 +53,25 @@ func (s *Session) handlePacket(pkt []byte) error {
 	switch reqType {
 	case
 		"DLTSKEYSIGN:100",
-		"DSGN:100",
-		"VITASGN:100":
+		"DSGN:100":
 		err := s.handleDSGNRequest(bf)
 		if err != nil {
 			return nil
 		}
+	case "VITASGN:100":
+		s.server.logger.Info("Got VITASGN:100")
+		data, err := ioutil.ReadFile("hacked_vita_resp.bin")
+		if err != nil {
+			s.server.logger.Fatal("Error reading vita resp", zap.Error(err))
+			return err
+		}
+
+		err = s.cryptConn.SendPacket(data)
+		if err != nil {
+			return err
+		}
+
+		s.server.logger.Info("Send vita resp")
 	case "DELETE:100":
 		loginTokenString := string(bf.ReadNullTerminatedBytes())
 		_ = loginTokenString
