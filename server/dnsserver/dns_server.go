@@ -95,6 +95,18 @@ func NewServer(config *Config) *Server {
 	return s
 }
 
+var googleResolver net.Resolver
+
+func init() {
+	googleResolver = net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			d := net.Dialer{}
+			return d.DialContext(ctx, "udp", "8.8.8.8:53")
+		},
+	}
+}
+
 // Start starts the server in a new goroutine.
 func (s *Server) Start() error {
 	s.dnsServer.Addr = fmt.Sprintf(":%d", s.erupeConfig.DNS.Port)
@@ -152,7 +164,7 @@ func (s *Server) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		} else {
 			s.logger.Info("That domain isn't ours, proxy DNS request to google.")
 			// We don't have a local entry for it, lookup with our forward/proxied DNS resolver and return the response.
-			ips, err := s.forwardResolver.LookupHost(context.Background(), domain)
+			ips, err := googleResolver.LookupHost(context.Background(), domain)
 			if err == nil {
 				for _, ip := range ips {
 					msg.Answer = append(msg.Answer, &dns.A{
