@@ -56,6 +56,10 @@ func (s *Server) setupServerlistRoutes(r *mux.Router) {
 	jpPs3ServerList := r.Host("srv-mhf-ps3.capcom-networks.jp").Subrouter()
 	jpPs3ServerList.Handle("/serverlist.xml", ServerHandlerFunc{s, serverList})
 
+	// JP vita
+	jpPsVitaServerList := r.Host("srv-mhf-psvita.capcom-networks.jp").Subrouter()
+	jpPsVitaServerList.Handle("/serverlist.xml", ServerHandlerFunc{s, serverList})
+
 }
 
 func (s *Server) setupOriginalLauncherRotues(r *mux.Router) {
@@ -88,4 +92,9 @@ func (s *Server) setupCustomLauncherRotues(r *mux.Router) {
 	// JP PS3
 	jpPs3Main := r.Host("ps3-members.mhf-z.jp").Subrouter()
 	jpPs3Main.PathPrefix("/sp/launcher/").Handler(http.StripPrefix("/sp/launcher/", http.FileServer(http.Dir("./www/erupe"))))
+
+	// JP vita
+	jpPsVitaMain := r.Host("psvita-members.mhf-z.jp").Subrouter()
+	jpPsVitaMain.PathPrefix("/sp/launcher/").Handler(http.StripPrefix("/sp/launcher/", http.FileServer(http.Dir("./www/erupe"))))
+
 }
