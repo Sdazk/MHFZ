@@ -6,12 +6,13 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/Erupe/server/channelserver/compression/deltacomp"
@@ -388,28 +389,28 @@ func doStageTransfer(s *Session, ackHandle uint32, stageID string) {
 			CharID: session.charID,
 		}
 		clientNotif.WriteUint16(uint16(cur.Opcode()))
-		cur.Build(clientNotif)
+		cur.Build(clientNotif, session.packetContext)
 
 		cur = &mhfpacket.MsgSysNotifyUserBinary{
 			CharID:     session.charID,
 			BinaryType: 1,
 		}
 		clientNotif.WriteUint16(uint16(cur.Opcode()))
-		cur.Build(clientNotif)
+		cur.Build(clientNotif, session.packetContext)
 
 		cur = &mhfpacket.MsgSysNotifyUserBinary{
 			CharID:     session.charID,
 			BinaryType: 2,
 		}
 		clientNotif.WriteUint16(uint16(cur.Opcode()))
-		cur.Build(clientNotif)
+		cur.Build(clientNotif, session.packetContext)
 
 		cur = &mhfpacket.MsgSysNotifyUserBinary{
 			CharID:     session.charID,
 			BinaryType: 3,
 		}
 		clientNotif.WriteUint16(uint16(cur.Opcode()))
-		cur.Build(clientNotif)
+		cur.Build(clientNotif, session.packetContext)
 	}
 	s.stage.RUnlock()
 	clientNotif.WriteUint16(0x0010) // End it.
@@ -429,7 +430,7 @@ func doStageTransfer(s *Session, ackHandle uint32, stageID string) {
 			OwnerCharID: obj.ownerCharID,
 		}
 		clientDupObjNotif.WriteUint16(uint16(cur.Opcode()))
-		cur.Build(clientDupObjNotif)
+		cur.Build(clientDupObjNotif, s.packetContext)
 	}
 	s.stage.RUnlock()
 	clientDupObjNotif.WriteUint16(0x0010) // End it.

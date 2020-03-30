@@ -1,7 +1,10 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -18,7 +21,7 @@ func (m *MsgMhfSetEnhancedMinidata) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfSetEnhancedMinidata) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfSetEnhancedMinidata) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint16()
 	m.RawDataPayload = bf.ReadBytes(0x400)
@@ -26,6 +29,6 @@ func (m *MsgMhfSetEnhancedMinidata) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfSetEnhancedMinidata) Build(bf *byteframe.ByteFrame) error {
-	panic("Not implemented")
+func (m *MsgMhfSetEnhancedMinidata) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
+	return errors.New("Not implemented")
 }

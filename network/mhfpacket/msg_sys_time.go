@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -17,14 +18,14 @@ func (m *MsgSysTime) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysTime) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysTime) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	m.GetRemoteTime = bf.ReadBool()
 	m.Timestamp = bf.ReadUint32()
 	return nil
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysTime) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysTime) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	bf.WriteBool(m.GetRemoteTime)
 	bf.WriteUint32(m.Timestamp)
 	return nil

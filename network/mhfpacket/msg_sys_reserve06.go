@@ -1,7 +1,10 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -14,11 +17,11 @@ func (m *MsgSysReserve06) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysReserve06) Parse(bf *byteframe.ByteFrame) error {
-	panic("Not implemented")
+func (m *MsgSysReserve06) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
+	return errors.New("Not implemented")
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysReserve06) Build(bf *byteframe.ByteFrame) error {
-	panic("Not implemented")
+func (m *MsgSysReserve06) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
+	return errors.New("Not implemented")
 }

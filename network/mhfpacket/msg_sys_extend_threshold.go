@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -14,13 +15,13 @@ func (m *MsgSysExtendThreshold) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysExtendThreshold) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysExtendThreshold) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	// No data aside from opcode.
 	return nil
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysExtendThreshold) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysExtendThreshold) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	// No data aside from opcode.
 	return nil
 }

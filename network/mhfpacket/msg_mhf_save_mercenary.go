@@ -1,12 +1,15 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
 // MsgMhfSaveMercenary represents the MSG_MHF_SAVE_MERCENARY
-type MsgMhfSaveMercenary struct{
+type MsgMhfSaveMercenary struct {
 	AckHandle      uint32
 	DataSize       uint32
 	RawDataPayload []byte
@@ -18,7 +21,7 @@ func (m *MsgMhfSaveMercenary) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfSaveMercenary) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfSaveMercenary) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.DataSize = bf.ReadUint32()
 	m.RawDataPayload = bf.ReadBytes(uint(m.DataSize))
@@ -26,6 +29,6 @@ func (m *MsgMhfSaveMercenary) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfSaveMercenary) Build(bf *byteframe.ByteFrame) error {
-	panic("Not implemented")
+func (m *MsgMhfSaveMercenary) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
+	return errors.New("Not implemented")
 }

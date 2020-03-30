@@ -1,14 +1,17 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
 // MsgSysCreateSemaphore represents the MSG_SYS_CREATE_SEMAPHORE
-type MsgSysCreateSemaphore struct{
-	AckHandle uint32
-	Unk0	uint16
+type MsgSysCreateSemaphore struct {
+	AckHandle      uint32
+	Unk0           uint16
 	DataSize       uint16
 	RawDataPayload []byte
 }
@@ -19,7 +22,7 @@ func (m *MsgSysCreateSemaphore) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysCreateSemaphore) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysCreateSemaphore) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint16()
 	m.DataSize = bf.ReadUint16()
@@ -28,6 +31,6 @@ func (m *MsgSysCreateSemaphore) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysCreateSemaphore) Build(bf *byteframe.ByteFrame) error {
-	panic("Not implemented")
+func (m *MsgSysCreateSemaphore) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
+	return errors.New("Not implemented")
 }

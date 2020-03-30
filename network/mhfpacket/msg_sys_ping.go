@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -16,13 +17,13 @@ func (m *MsgSysPing) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysPing) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysPing) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	m.AckHandle = bf.ReadUint32()
 	return nil
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysPing) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysPing) Build(bf *byteframe.ByteFrame, pctx *pctx.PacketContext) error {
 	bf.WriteUint32(m.AckHandle)
 	return nil
 }
