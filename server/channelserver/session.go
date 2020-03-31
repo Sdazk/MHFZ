@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/Andoryuuta/Erupe/common/stringstack"
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
@@ -39,12 +40,16 @@ type Session struct {
 // NewSession creates a new Session type.
 func NewSession(server *Server, conn net.Conn) *Session {
 	s := &Session{
-		logger:         server.logger.Named(conn.RemoteAddr().String()),
-		server:         server,
-		rawConn:        conn,
-		cryptConn:      network.NewCryptConn(conn),
-		sendPackets:    make(chan []byte, 20),
-		packetContext:  &pctx.PacketContext{Encoding: japanese.ShiftJIS},
+		logger:      server.logger.Named(conn.RemoteAddr().String()),
+		server:      server,
+		rawConn:     conn,
+		cryptConn:   network.NewCryptConn(conn),
+		sendPackets: make(chan []byte, 20),
+		packetContext: &pctx.PacketContext{
+			StrConv: &stringsupport.StringConverter{
+				Encoding: japanese.ShiftJIS,
+			},
+		},
 		stageMoveStack: stringstack.New(),
 	}
 	return s

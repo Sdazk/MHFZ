@@ -3,6 +3,7 @@ package mhfpacket
 import (
 	"errors"
 
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
@@ -49,7 +50,7 @@ func (m *MsgSysGetFile) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketContext)
 	m.IsScenario = bf.ReadBool()
 	m.FilenameLength = bf.ReadUint8()
 	if m.FilenameLength > 0 {
-		m.Filename = string(bf.ReadBytes(uint(m.FilenameLength)))
+		m.Filename = string(bfutil.UpToNull(bf.ReadBytes(uint(m.FilenameLength))))
 	}
 
 	if m.IsScenario {

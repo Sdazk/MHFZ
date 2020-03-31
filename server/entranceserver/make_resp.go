@@ -2,8 +2,9 @@ package entranceserver
 
 import (
 	"encoding/binary"
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"net"
+
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 
 	"github.com/Andoryuuta/Erupe/config"
 	"github.com/Andoryuuta/byteframe"

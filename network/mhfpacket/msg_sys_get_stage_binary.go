@@ -3,6 +3,7 @@ package mhfpacket
 import (
 	"errors"
 
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
@@ -10,12 +11,11 @@ import (
 
 // MsgSysGetStageBinary represents the MSG_SYS_GET_STAGE_BINARY
 type MsgSysGetStageBinary struct {
-	AckHandle     uint32
-	BinaryType0   uint8
-	BinaryType1   uint8
-	Unk0          uint32 // Hardcoded 0
-	StageIDLength uint8
-	StageID       string
+	AckHandle   uint32
+	BinaryType0 uint8
+	BinaryType1 uint8
+	Unk0        uint32 // Hardcoded 0
+	StageID     string
 }
 
 // Opcode returns the ID associated with this packet type.
@@ -29,8 +29,8 @@ func (m *MsgSysGetStageBinary) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketC
 	m.BinaryType0 = bf.ReadUint8()
 	m.BinaryType1 = bf.ReadUint8()
 	m.Unk0 = bf.ReadUint32()
-	m.StageIDLength = bf.ReadUint8()
-	m.StageID = string(bf.ReadBytes(uint(m.StageIDLength)))
+	stageIDLength := bf.ReadUint8()
+	m.StageID = string(bfutil.UpToNull(bf.ReadBytes(uint(stageIDLength))))
 	return nil
 }
 

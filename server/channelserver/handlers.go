@@ -9,11 +9,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
-
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/Erupe/server/channelserver/compression/deltacomp"
 	"github.com/Andoryuuta/Erupe/server/channelserver/compression/nullcomp"
@@ -126,9 +124,11 @@ func fixedSizeShiftJIS(text string, size int) []byte {
 }
 
 // TODO(Andoryuuta): Fix/move/remove me!
-func stripNullTerminator(x string) string {
+/*
+func bfutil.UpToNull(x string) string {
 	return strings.SplitN(x, "\x00", 2)[0]
 }
+*/
 
 func handleMsgHead(s *Session, p mhfpacket.MHFPacket) {}
 
@@ -246,7 +246,7 @@ func handleMsgSysGetFile(s *Session, p mhfpacket.MHFPacket) {
 			doAckBufSucceed(s, pkt.AckHandle, data)
 		} else {
 			// Get quest file.
-			data, err := ioutil.ReadFile(filepath.Join(s.server.erupeConfig.BinPath, fmt.Sprintf("quests/%s.bin", stripNullTerminator(pkt.Filename))))
+			data, err := ioutil.ReadFile(filepath.Join(s.server.erupeConfig.BinPath, fmt.Sprintf("quests/%s.bin", pkt.Filename)))
 			if err != nil {
 				panic(err)
 			}
@@ -318,7 +318,7 @@ func handleMsgSysCreateStage(s *Session, p mhfpacket.MHFPacket) {
 	pkt := p.(*mhfpacket.MsgSysCreateStage)
 
 	s.server.stagesLock.Lock()
-	stage := NewStage(stripNullTerminator(pkt.StageID))
+	stage := NewStage(pkt.StageID)
 	stage.maxPlayers = uint16(pkt.PlayerCount)
 	s.server.stages[stage.id] = stage
 	s.server.stagesLock.Unlock()
@@ -331,7 +331,7 @@ func handleMsgSysStageDestruct(s *Session, p mhfpacket.MHFPacket) {}
 func doStageTransfer(s *Session, ackHandle uint32, stageID string) {
 	// Remove this session from old stage clients list and put myself in the new one.
 	s.server.stagesLock.Lock()
-	newStage, gotNewStage := s.server.stages[stripNullTerminator(stageID)]
+	newStage, gotNewStage := s.server.stages[stageID]
 	s.server.stagesLock.Unlock()
 
 	if s.stage != nil {
@@ -347,7 +347,7 @@ func doStageTransfer(s *Session, ackHandle uint32, stageID string) {
 
 	// Save our new stage ID and pointer to the new stage itself.
 	s.Lock()
-	s.stageID = string(stripNullTerminator(stageID))
+	s.stageID = string(stageID)
 	s.stage = newStage
 	s.Unlock()
 
@@ -553,16 +553,15 @@ func handleMsgSysUnlockStage(s *Session, p mhfpacket.MHFPacket) {
 func handleMsgSysReserveStage(s *Session, p mhfpacket.MHFPacket) {
 	pkt := p.(*mhfpacket.MsgSysReserveStage)
 
-	stageID := stripNullTerminator(pkt.StageID)
-	fmt.Printf("Got reserve stage req, TargetCount:%v, StageID:%v\n", pkt.Unk0, stageID)
+	fmt.Printf("Got reserve stage req, TargetCount:%v, StageID:%v\n", pkt.Unk0, pkt.StageID)
 
 	// Try to get the stage
 	s.server.stagesLock.Lock()
-	stage, gotStage := s.server.stages[stageID]
+	stage, gotStage := s.server.stages[pkt.StageID]
 	s.server.stagesLock.Unlock()
 
 	if !gotStage {
-		s.logger.Fatal("Failed to get stage", zap.String("StageID", stageID))
+		s.logger.Fatal("Failed to get stage", zap.String("StageID", pkt.StageID))
 	}
 
 	// Try to reserve a slot, fail if full.
@@ -619,9 +618,8 @@ func handleMsgSysWaitStageBinary(s *Session, p mhfpacket.MHFPacket) {
 	defer s.logger.Debug("MsgSysWaitStageBinary Done!")
 
 	// Try to get the stage
-	stageID := stripNullTerminator(pkt.StageID)
 	s.server.stagesLock.Lock()
-	stage, gotStage := s.server.stages[stageID]
+	stage, gotStage := s.server.stages[pkt.StageID]
 	s.server.stagesLock.Unlock()
 
 	// TODO(Andoryuuta): This is a hack for a binary part that none of the clients set, figure out what it represents.
@@ -665,7 +663,7 @@ func handleMsgSysWaitStageBinary(s *Session, p mhfpacket.MHFPacket) {
 			*/
 		}
 	} else {
-		s.logger.Warn("Failed to get stage", zap.String("StageID", stageID))
+		s.logger.Warn("Failed to get stage", zap.String("StageID", pkt.StageID))
 	}
 }
 
@@ -673,9 +671,8 @@ func handleMsgSysSetStageBinary(s *Session, p mhfpacket.MHFPacket) {
 	pkt := p.(*mhfpacket.MsgSysSetStageBinary)
 
 	// Try to get the stage
-	stageID := stripNullTerminator(pkt.StageID)
 	s.server.stagesLock.Lock()
-	stage, gotStage := s.server.stages[stageID]
+	stage, gotStage := s.server.stages[pkt.StageID]
 	s.server.stagesLock.Unlock()
 
 	// If we got the stage, lock and set the data.
@@ -684,7 +681,7 @@ func handleMsgSysSetStageBinary(s *Session, p mhfpacket.MHFPacket) {
 		stage.rawBinaryData[stageBinaryKey{pkt.BinaryType0, pkt.BinaryType1}] = pkt.RawDataPayload
 		stage.Unlock()
 	} else {
-		s.logger.Warn("Failed to get stage", zap.String("StageID", stageID))
+		s.logger.Warn("Failed to get stage", zap.String("StageID", pkt.StageID))
 	}
 	s.logger.Debug("handleMsgSysSetStageBinary Done!")
 }
@@ -693,9 +690,8 @@ func handleMsgSysGetStageBinary(s *Session, p mhfpacket.MHFPacket) {
 	pkt := p.(*mhfpacket.MsgSysGetStageBinary)
 
 	// Try to get the stage
-	stageID := stripNullTerminator(pkt.StageID)
 	s.server.stagesLock.Lock()
-	stage, gotStage := s.server.stages[stageID]
+	stage, gotStage := s.server.stages[pkt.StageID]
 	s.server.stagesLock.Unlock()
 
 	// If we got the stage, lock and try to get the data.
@@ -706,7 +702,7 @@ func handleMsgSysGetStageBinary(s *Session, p mhfpacket.MHFPacket) {
 		stageBinary, gotBinary = stage.rawBinaryData[stageBinaryKey{pkt.BinaryType0, pkt.BinaryType1}]
 		stage.Unlock()
 	} else {
-		s.logger.Warn("Failed to get stage", zap.String("StageID", stageID))
+		s.logger.Warn("Failed to get stage", zap.String("StageID", pkt.StageID))
 	}
 
 	if gotBinary {
@@ -737,7 +733,7 @@ func handleMsgSysEnumerateClient(s *Session, p mhfpacket.MHFPacket) {
 	// Read-lock the stages map.
 	s.server.stagesLock.RLock()
 
-	stage, ok := s.server.stages[stripNullTerminator(pkt.StageID)]
+	stage, ok := s.server.stages[pkt.StageID]
 	if !ok {
 		s.logger.Fatal("Can't enumerate clients for stage that doesn't exist!", zap.String("stageID", pkt.StageID))
 	}
@@ -1120,8 +1116,8 @@ func handleMsgMhfSavedata(s *Session, p mhfpacket.MHFPacket) {
 		s.logger.Fatal("Failed to update character gr_override_level in db", zap.Error(err))
 	}
 
-	characterName := strings.SplitN(string(decompressedData[88:100]), "\x00", 2)[0]
-	_, err = s.server.db.Exec("UPDATE characters SET name=$1 WHERE id=$2", stringsupport.MustConvertShiftJISToUTF8(characterName), s.charID)
+	characterName := s.packetContext.StrConv.MustDecode(bfutil.UpToNull(decompressedData[88:100]))
+	_, err = s.server.db.Exec("UPDATE characters SET name=$1 WHERE id=$2", characterName, s.charID)
 	if err != nil {
 		s.logger.Fatal("Failed to update character name in db", zap.Error(err))
 	}

@@ -3,10 +3,10 @@ package channelserver
 import (
 	"database/sql"
 	"fmt"
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
+	"time"
+
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
-	"time"
 )
 
 type FestivalColour string
@@ -385,15 +385,9 @@ func CreateGuild(s *Session, guildName string) (int32, error) {
 		return 0, err
 	}
 
-	guildNameSafe, err := stringsupport.ConvertShiftJISToUTF8(guildName)
-
-	if err != nil {
-		panic(err)
-	}
-
 	guildResult, err := transaction.Query(
 		"INSERT INTO guilds (name, leader_id) VALUES ($1, $2) RETURNING id",
-		guildNameSafe, s.charID,
+		guildName, s.charID,
 	)
 
 	if err != nil {

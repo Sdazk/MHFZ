@@ -4,8 +4,9 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"sort"
+
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/byteframe"
@@ -15,7 +16,7 @@ import (
 func handleMsgMhfCreateGuild(s *Session, p mhfpacket.MHFPacket) {
 	pkt := p.(*mhfpacket.MsgMhfCreateGuild)
 
-	guildId, err := CreateGuild(s, stripNullTerminator(pkt.Name))
+	guildId, err := CreateGuild(s, pkt.Name)
 
 	if err != nil {
 		bf := byteframe.NewByteFrame()
@@ -94,10 +95,7 @@ func handleMsgMhfOperateGuild(s *Session, p mhfpacket.MHFPacket) {
 		mottoLength := pbf.ReadUint8()
 		_ = pbf.ReadUint32()
 
-		guild.Comment, err = stringsupport.ConvertShiftJISToUTF8(
-			stripNullTerminator(string(pbf.ReadBytes(uint(mottoLength)))),
-		)
-
+		guild.Comment, err = s.packetContext.StrConv.Decode(bfutil.UpToNull(pbf.ReadBytes(uint(mottoLength))))
 		if err != nil {
 			s.logger.Warn("failed to convert guild motto to UTF8", zap.Error(err))
 			doAckSimpleFail(s, pkt.AckHandle, make([]byte, 4))
@@ -240,8 +238,8 @@ func handleMsgMhfInfoGuild(s *Session, p mhfpacket.MHFPacket) {
 	}
 
 	if err == nil && guild != nil {
-		guildName := stringsupport.MustConvertUTF8ToShiftJIS(guild.Name)
-		guildComment := stringsupport.MustConvertUTF8ToShiftJIS(guild.Comment)
+		guildName := s.packetContext.StrConv.MustEncode(guild.Name)
+		guildComment := s.packetContext.StrConv.MustEncode(guild.Comment)
 
 		characterGuildData, err := GetCharacterGuildData(s, s.charID)
 
@@ -281,21 +279,21 @@ func handleMsgMhfInfoGuild(s *Session, p mhfpacket.MHFPacket) {
 			bf.WriteUint16(0x02)
 		}
 
-		leaderName := stringsupport.MustConvertUTF8ToShiftJIS(guild.LeaderName) + "\x00"
+		leaderName := s.packetContext.StrConv.MustEncode(guild.LeaderName)
 
 		bf.WriteUint32(uint32(guild.CreatedAt.Unix()))
 		bf.WriteUint32(characterJoinedAt)
 		bf.WriteUint8(uint8(len(guildName)))
 		bf.WriteUint8(uint8(len(guildComment)))
 		bf.WriteUint8(uint8(5)) // Length of unknown string below
-		bf.WriteUint8(uint8(len(leaderName)))
+		bf.WriteUint8(uint8(len(leaderName) + 1))
 		bf.WriteBytes([]byte(guildName))
 		bf.WriteBytes([]byte(guildComment))
 
 		bf.WriteUint8(FestivalColourCodes[guild.FestivalColour])
 
 		bf.WriteUint32(guild.RP)
-		bf.WriteBytes([]byte(leaderName))
+		bf.WriteNullTerminatedBytes(leaderName)
 		bf.WriteBytes([]byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00}) // Unk
 
 		// Here there are always 3 null terminated names, not sure what they relate to though
@@ -356,12 +354,12 @@ func handleMsgMhfInfoGuild(s *Session, p mhfpacket.MHFPacket) {
 		bf.WriteUint16(uint16(len(applicants)))
 
 		for _, applicant := range applicants {
-			applicantName := stringsupport.MustConvertUTF8ToShiftJIS(applicant.Name) + "\x00"
+			applicantName := s.packetContext.StrConv.MustEncode(applicant.Name)
 			bf.WriteUint32(applicant.CharID)
 			bf.WriteUint32(0x05)
 			bf.WriteUint32(0x00320000)
-			bf.WriteUint8(uint8(len(applicantName)))
-			bf.WriteBytes([]byte(applicantName))
+			bf.WriteUint8(uint8(len(applicantName) + 1))
+			bf.WriteNullTerminatedBytes(applicantName)
 		}
 
 		// There can be some more bytes here but I cannot make sense of them right now.
@@ -394,8 +392,7 @@ func handleMsgMhfEnumerateGuild(s *Session, p mhfpacket.MHFPacket) {
 
 		var searchTermSafe string
 
-		searchTermSafe, err = stringsupport.ConvertShiftJISToUTF8(stripNullTerminator(string(searchTerm)))
-
+		searchTermSafe, err = s.packetContext.StrConv.Decode(bfutil.UpToNull(searchTerm))
 		if err != nil {
 			panic(err)
 		}
@@ -414,8 +411,8 @@ func handleMsgMhfEnumerateGuild(s *Session, p mhfpacket.MHFPacket) {
 	bf.WriteUint16(uint16(len(guilds)))
 
 	for _, guild := range guilds {
-		guildName := stringsupport.MustConvertUTF8ToShiftJIS(guild.Name)
-		leaderName := stringsupport.MustConvertUTF8ToShiftJIS(guild.LeaderName)
+		guildName := s.packetContext.StrConv.MustEncode(guild.Name)
+		leaderName := s.packetContext.StrConv.MustEncode(guild.LeaderName)
 
 		bf.WriteUint8(0x00) // Unk
 		bf.WriteUint32(guild.ID)
@@ -426,9 +423,9 @@ func handleMsgMhfEnumerateGuild(s *Session, p mhfpacket.MHFPacket) {
 		bf.WriteUint16(0x00) // Rank
 		bf.WriteUint32(uint32(guild.CreatedAt.Unix()))
 		bf.WriteUint8(uint8(len(guildName)))
-		bf.WriteBytes([]byte(guildName))
+		bf.WriteBytes(guildName)
 		bf.WriteUint8(uint8(len(leaderName)))
-		bf.WriteBytes([]byte(leaderName))
+		bf.WriteBytes(leaderName)
 		bf.WriteUint8(0x01) // Unk
 	}
 
@@ -512,13 +509,13 @@ func handleMsgMhfEnumerateGuildMember(s *Session, p mhfpacket.MHFPacket) {
 	})
 
 	for _, member := range guildMembers {
-		name := stringsupport.MustConvertUTF8ToShiftJIS(member.Name) + "\x00"
+		name := s.packetContext.StrConv.MustEncode(member.Name)
 
 		bf.WriteUint32(member.CharID)
 		bf.WriteBytes([]byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}) // Unk
 		bf.WriteUint16(member.OrderIndex)
-		bf.WriteUint16(uint16(len(name)))
-		bf.WriteBytes([]byte(name))
+		bf.WriteUint16(uint16(len(name) + 1))
+		bf.WriteNullTerminatedBytes(name)
 	}
 
 	for _, member := range guildMembers {

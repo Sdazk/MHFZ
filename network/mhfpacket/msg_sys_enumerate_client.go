@@ -3,6 +3,7 @@ package mhfpacket
 import (
 	"errors"
 
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
@@ -10,11 +11,10 @@ import (
 
 // MsgSysEnumerateClient represents the MSG_SYS_ENUMERATE_CLIENT
 type MsgSysEnumerateClient struct {
-	AckHandle     uint32
-	Unk0          uint8 // Hardcoded 1 in the client
-	Unk1          uint8
-	StageIDLength uint8
-	StageID       string
+	AckHandle uint32
+	Unk0      uint8 // Hardcoded 1 in the client
+	Unk1      uint8
+	StageID   string
 }
 
 // Opcode returns the ID associated with this packet type.
@@ -27,8 +27,8 @@ func (m *MsgSysEnumerateClient) Parse(bf *byteframe.ByteFrame, pctx *pctx.Packet
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint8()
 	m.Unk1 = bf.ReadUint8()
-	m.StageIDLength = bf.ReadUint8()
-	m.StageID = string(bf.ReadBytes(uint(m.StageIDLength)))
+	stageIDLength := bf.ReadUint8()
+	m.StageID = string(bfutil.UpToNull(bf.ReadBytes(uint(stageIDLength))))
 	return nil
 }
 

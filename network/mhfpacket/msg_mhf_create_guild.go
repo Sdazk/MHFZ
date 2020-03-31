@@ -3,6 +3,7 @@ package mhfpacket
 import (
 	"errors"
 
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket/pctx"
 	"github.com/Andoryuuta/byteframe"
@@ -26,7 +27,9 @@ func (m *MsgMhfCreateGuild) Parse(bf *byteframe.ByteFrame, pctx *pctx.PacketCont
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint8()
 	m.Unk1 = bf.ReadUint8()
-	m.Name = string(bf.ReadBytes(uint(bf.ReadUint16())))
+	nameLength := bf.ReadUint16()
+	nameBytes := bfutil.UpToNull(bf.ReadBytes(uint(nameLength)))
+	m.Name = pctx.StrConv.MustDecode(nameBytes)
 
 	return nil
 }

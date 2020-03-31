@@ -1,10 +1,10 @@
 package pctx
 
 import (
-	"golang.org/x/text/encoding"
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 )
 
 // PacketContext holds contextual data required for packet parsing.
 type PacketContext struct {
-	Encoding encoding.Encoding
+	StrConv *stringsupport.StringConverter
 }
