@@ -1,10 +1,11 @@
 package network
 
-//revive:disable
+// PacketID represents the network-level packet ID.
 type PacketID uint16
 
 //go:generate stringer -type=PacketID
 const (
+	//revive:disable
 	MSG_HEAD PacketID = iota
 	MSG_SYS_reserve01
 	MSG_SYS_reserve02
@@ -437,6 +438,5 @@ const (
 	MSG_SYS_reserve20D
 	MSG_SYS_reserve20E
 	MSG_SYS_reserve20F
+	//revive:enable
 )
-
-//revive:enable
