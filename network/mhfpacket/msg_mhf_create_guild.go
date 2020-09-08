@@ -1,6 +1,8 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
@@ -34,5 +36,5 @@ func (m *MsgMhfCreateGuild) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Client
 
 // Build builds a binary packet from the current data.
 func (m *MsgMhfCreateGuild) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	panic("Not implemented")
+	return errors.New("Not implemented")
 }

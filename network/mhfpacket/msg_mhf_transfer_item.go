@@ -1,6 +1,8 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -33,5 +35,5 @@ func (m *MsgMhfTransferItem) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Clien
 
 // Build builds a binary packet from the current data.
 func (m *MsgMhfTransferItem) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	panic("Not implemented")
+	return errors.New("Not implemented")
 }

@@ -179,12 +179,13 @@ func (s *Session) handlePacketGroup(pktGroup []byte) {
 		return
 	}
 
-	// Parse and handle the packet
+	// Parse the packet.
 	err := mhfPkt.Parse(bf, s.clientContext)
 	if err != nil {
 		panic(err)
 	}
 
+	// Handle the packet.
 	handlerTable[opcode](s, mhfPkt)
 
 	// If there is more data on the stream that the .Parse method didn't read, then read another packet off it.

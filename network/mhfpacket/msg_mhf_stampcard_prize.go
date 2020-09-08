@@ -1,6 +1,8 @@
 package mhfpacket
 
 import (
+	"errors"
+
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -16,10 +18,10 @@ func (m *MsgMhfStampcardPrize) Opcode() network.PacketID {
 
 // Parse parses the packet from binary
 func (m *MsgMhfStampcardPrize) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	panic("Not implemented")
+	return errors.New("Not implemented")
 }
 
 // Build builds a binary packet from the current data.
 func (m *MsgMhfStampcardPrize) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	panic("Not implemented")
+	return errors.New("Not implemented")
 }
