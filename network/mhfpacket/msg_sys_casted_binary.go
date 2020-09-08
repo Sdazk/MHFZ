@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -19,7 +20,7 @@ func (m *MsgSysCastedBinary) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysCastedBinary) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysCastedBinary) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.CharID = bf.ReadUint32()
 	m.Type0 = bf.ReadUint8()
 	m.Type1 = bf.ReadUint8()
@@ -29,7 +30,7 @@ func (m *MsgSysCastedBinary) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysCastedBinary) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysCastedBinary) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	bf.WriteUint32(m.CharID)
 	bf.WriteUint8(m.Type0)
 	bf.WriteUint8(m.Type1)

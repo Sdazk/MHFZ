@@ -9,6 +9,7 @@ import (
 
 	"github.com/Andoryuuta/Erupe/common/stringstack"
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/byteframe"
 	"go.uber.org/zap"
@@ -17,11 +18,12 @@ import (
 // Session holds state for the channel server connection.
 type Session struct {
 	sync.Mutex
-	logger      *zap.Logger
-	server      *Server
-	rawConn     net.Conn
-	cryptConn   *network.CryptConn
-	sendPackets chan []byte
+	logger        *zap.Logger
+	server        *Server
+	rawConn       net.Conn
+	cryptConn     *network.CryptConn
+	sendPackets   chan []byte
+	clientContext *clientctx.ClientContext
 
 	stageID          string
 	stage            *Stage
@@ -41,6 +43,7 @@ func NewSession(server *Server, conn net.Conn) *Session {
 		rawConn:        conn,
 		cryptConn:      network.NewCryptConn(conn),
 		sendPackets:    make(chan []byte, 20),
+		clientContext:  &clientctx.ClientContext{},
 		stageMoveStack: stringstack.New(),
 	}
 	return s
@@ -86,7 +89,7 @@ func (s *Session) QueueSendMHF(pkt mhfpacket.MHFPacket) {
 	bf.WriteUint16(uint16(pkt.Opcode()))
 
 	// Build the packet onto the byteframe.
-	pkt.Build(bf)
+	pkt.Build(bf, s.clientContext)
 
 	// Queue it.
 	s.QueueSend(bf.Data())
@@ -171,7 +174,11 @@ func (s *Session) handlePacketGroup(pktGroup []byte) {
 	}
 
 	// Parse and handle the packet
-	mhfPkt.Parse(bf)
+	err := mhfPkt.Parse(bf, s.clientContext)
+	if err != nil {
+		panic(err)
+	}
+
 	handlerTable[opcode](s, mhfPkt)
 
 	// If there is more data on the stream that the .Parse method didn't read, then read another packet off it.

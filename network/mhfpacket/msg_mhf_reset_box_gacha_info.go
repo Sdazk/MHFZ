@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -14,11 +15,11 @@ func (m *MsgMhfResetBoxGachaInfo) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfResetBoxGachaInfo) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfResetBoxGachaInfo) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfResetBoxGachaInfo) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfResetBoxGachaInfo) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

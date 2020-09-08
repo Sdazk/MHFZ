@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -18,7 +19,7 @@ func (m *MsgSysSetStagePass) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysSetStagePass) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysSetStagePass) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.Unk0 = bf.ReadUint8()
 	m.PasswordLength = bf.ReadUint8()
 	m.Password = string(bf.ReadBytes(uint(m.PasswordLength)))
@@ -26,6 +27,6 @@ func (m *MsgSysSetStagePass) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysSetStagePass) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysSetStagePass) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

@@ -2,15 +2,16 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
 // MsgMhfEnumerateDistItem represents the MSG_MHF_ENUMERATE_DIST_ITEM
-type MsgMhfEnumerateDistItem struct{
+type MsgMhfEnumerateDistItem struct {
 	AckHandle uint32
-	Unk0 uint8
-	Unk1 uint16
-	Unk2 uint16
+	Unk0      uint8
+	Unk1      uint16
+	Unk2      uint16
 }
 
 // Opcode returns the ID associated with this packet type.
@@ -19,7 +20,7 @@ func (m *MsgMhfEnumerateDistItem) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfEnumerateDistItem) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfEnumerateDistItem) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint8()
 	m.Unk1 = bf.ReadUint16()
@@ -28,6 +29,6 @@ func (m *MsgMhfEnumerateDistItem) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfEnumerateDistItem) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfEnumerateDistItem) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

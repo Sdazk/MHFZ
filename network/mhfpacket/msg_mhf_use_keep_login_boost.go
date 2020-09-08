@@ -2,12 +2,13 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
 // MsgMhfUseKeepLoginBoost represents the MSG_MHF_USE_KEEP_LOGIN_BOOST
-type MsgMhfUseKeepLoginBoost struct{
-	AckHandle uint32
+type MsgMhfUseKeepLoginBoost struct {
+	AckHandle     uint32
 	BoostWeekUsed uint8
 }
 
@@ -17,13 +18,13 @@ func (m *MsgMhfUseKeepLoginBoost) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfUseKeepLoginBoost) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfUseKeepLoginBoost) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.BoostWeekUsed = bf.ReadUint8()
 	return nil
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfUseKeepLoginBoost) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfUseKeepLoginBoost) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

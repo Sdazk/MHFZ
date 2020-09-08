@@ -2,9 +2,10 @@ package stringsupport
 
 import (
 	"bytes"
+	"io/ioutil"
+
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
-	"io/ioutil"
 )
 
 func MustConvertShiftJISToUTF8(text string) string {

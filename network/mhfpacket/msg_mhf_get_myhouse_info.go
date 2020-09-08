@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -21,7 +22,7 @@ func (m *MsgMhfGetMyhouseInfo) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfGetMyhouseInfo) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfGetMyhouseInfo) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint32()
 	m.DataSize = bf.ReadUint8()
@@ -30,6 +31,6 @@ func (m *MsgMhfGetMyhouseInfo) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfGetMyhouseInfo) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfGetMyhouseInfo) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

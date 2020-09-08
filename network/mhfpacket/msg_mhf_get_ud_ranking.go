@@ -2,11 +2,12 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
 // MsgMhfGetUdRanking represents the MSG_MHF_GET_UD_RANKING
-type MsgMhfGetUdRanking struct{
+type MsgMhfGetUdRanking struct {
 	AckHandle uint32
 }
 
@@ -16,12 +17,12 @@ func (m *MsgMhfGetUdRanking) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfGetUdRanking) Parse(bf *byteframe.ByteFrame) error {
-		m.AckHandle = bf.ReadUint32()
-		return nil
+func (m *MsgMhfGetUdRanking) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
+	m.AckHandle = bf.ReadUint32()
+	return nil
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfGetUdRanking) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfGetUdRanking) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

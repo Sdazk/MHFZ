@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -28,7 +29,7 @@ func (m *MsgMhfOperateGuildMember) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfOperateGuildMember) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfOperateGuildMember) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.GuildID = bf.ReadUint32()
 	m.CharID = bf.ReadUint32()
@@ -38,6 +39,6 @@ func (m *MsgMhfOperateGuildMember) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfOperateGuildMember) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfOperateGuildMember) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

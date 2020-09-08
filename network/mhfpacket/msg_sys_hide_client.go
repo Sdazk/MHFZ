@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -18,7 +19,7 @@ func (m *MsgSysHideClient) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgSysHideClient) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgSysHideClient) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.Hide = bf.ReadBool()
 	m.Unk0 = bf.ReadUint16()
 	m.Unk1 = bf.ReadUint8()
@@ -26,6 +27,6 @@ func (m *MsgSysHideClient) Parse(bf *byteframe.ByteFrame) error {
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgSysHideClient) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgSysHideClient) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }

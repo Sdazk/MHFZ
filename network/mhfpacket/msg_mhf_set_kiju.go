@@ -2,6 +2,7 @@ package mhfpacket
 
 import (
 	"github.com/Andoryuuta/Erupe/network"
+	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
 )
 
@@ -14,11 +15,11 @@ func (m *MsgMhfSetKiju) Opcode() network.PacketID {
 }
 
 // Parse parses the packet from binary
-func (m *MsgMhfSetKiju) Parse(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfSetKiju) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }
 
 // Build builds a binary packet from the current data.
-func (m *MsgMhfSetKiju) Build(bf *byteframe.ByteFrame) error {
+func (m *MsgMhfSetKiju) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	panic("Not implemented")
 }
