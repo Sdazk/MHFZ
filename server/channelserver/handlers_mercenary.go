@@ -1,10 +1,11 @@
 package channelserver
 
 import (
+	"math/rand"
+
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/byteframe"
 	"go.uber.org/zap"
-	"math/rand"
 )
 
 func handleMsgMhfMercenaryHuntdata(s *Session, p mhfpacket.MHFPacket) {}

@@ -3,6 +3,7 @@ package channelserver
 import (
 	"database/sql"
 	"encoding/binary"
+
 	"github.com/Andoryuuta/Erupe/server/channelserver/compression/nullcomp"
 	"go.uber.org/zap"
 )
