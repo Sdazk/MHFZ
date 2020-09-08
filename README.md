@@ -10,10 +10,11 @@ Currently allows a JP MHF client (with GameGuard removed) to:
 * Create a character
 * Get ingame to the main city
 * See other players walk around
-* Do quests* (Single player only. Only quests shipped with the game are on the counter. **Requires binary quest files not in the repo**)
+* Do quests (Only quests shipped with the game are on the counter. **Requires binary quest files not in the repo**)
 * Use (local) chat*
+* Partial guild support
 
-\* = Very limited or buggy.
+### All features can be assumed to be very limited or buggy.
 
 
 
