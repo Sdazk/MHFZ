@@ -1,6 +1,7 @@
 package mhfpacket
 
 import (
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -31,7 +32,6 @@ type scenarioFileIdentifer struct {
 type MsgSysGetFile struct {
 	AckHandle         uint32
 	IsScenario        bool
-	FilenameLength    uint8
 	Filename          string
 	ScenarioIdentifer scenarioFileIdentifer
 }
@@ -45,9 +45,9 @@ func (m *MsgSysGetFile) Opcode() network.PacketID {
 func (m *MsgSysGetFile) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
 	m.AckHandle = bf.ReadUint32()
 	m.IsScenario = bf.ReadBool()
-	m.FilenameLength = bf.ReadUint8()
-	if m.FilenameLength > 0 {
-		m.Filename = string(bf.ReadBytes(uint(m.FilenameLength)))
+	filenameLength := bf.ReadUint8()
+	if filenameLength > 0 {
+		m.Filename = string(bfutil.UpToNull(bf.ReadBytes(uint(filenameLength))))
 	}
 
 	if m.IsScenario {

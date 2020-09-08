@@ -1,6 +1,7 @@
 package mhfpacket
 
 import (
+	"github.com/Andoryuuta/Erupe/common/bfutil"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -8,11 +9,10 @@ import (
 
 // MsgSysCreateStage represents the MSG_SYS_CREATE_STAGE
 type MsgSysCreateStage struct {
-	AckHandle     uint32
-	Unk0          uint8 // Likely only has 1 and 2 as values.
-	PlayerCount   uint8
-	StageIDLength uint8
-	StageID       string // NULL terminated string.
+	AckHandle   uint32
+	Unk0        uint8 // Likely only has 1 and 2 as values.
+	PlayerCount uint8
+	StageID     string // NULL terminated string.
 }
 
 // Opcode returns the ID associated with this packet type.
@@ -25,8 +25,8 @@ func (m *MsgSysCreateStage) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Client
 	m.AckHandle = bf.ReadUint32()
 	m.Unk0 = bf.ReadUint8()
 	m.PlayerCount = bf.ReadUint8()
-	m.StageIDLength = bf.ReadUint8()
-	m.StageID = string(bf.ReadBytes(uint(m.StageIDLength)))
+	stageIDLength := bf.ReadUint8()
+	m.StageID = string(bfutil.UpToNull(bf.ReadBytes(uint(stageIDLength))))
 	return nil
 }
 

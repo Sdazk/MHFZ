@@ -2,8 +2,9 @@ package entranceserver
 
 import (
 	"encoding/binary"
-	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"net"
+
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 
 	"github.com/Andoryuuta/Erupe/config"
 	"github.com/Andoryuuta/byteframe"
@@ -29,7 +30,14 @@ func encodeServerInfo(serverInfos []config.EntranceServerInfo) []byte {
 		bf.WriteUint8(si.Type)
 		bf.WriteUint8(si.Season)
 		bf.WriteUint8(si.Unk6)
-		bf.WriteBytes(paddedString(stringsupport.MustConvertUTF8ToShiftJIS(si.Name), 66))
+
+		// TODO(Andoryuuta): Clean this up.
+		shiftjisName, err := stringsupport.ConvertUTF8ToShiftJIS(si.Name)
+		if err != nil {
+			panic(err)
+		}
+
+		bf.WriteBytes(paddedString(string(shiftjisName), 66))
 		bf.WriteUint32(si.AllowedClientFlags)
 
 		for channelIdx, ci := range si.Channels {

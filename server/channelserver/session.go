@@ -8,11 +8,13 @@ import (
 	"sync"
 
 	"github.com/Andoryuuta/Erupe/common/stringstack"
+	"github.com/Andoryuuta/Erupe/common/stringsupport"
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/Erupe/network/mhfpacket"
 	"github.com/Andoryuuta/byteframe"
 	"go.uber.org/zap"
+	"golang.org/x/text/encoding/japanese"
 )
 
 // Session holds state for the channel server connection.
@@ -38,12 +40,16 @@ type Session struct {
 // NewSession creates a new Session type.
 func NewSession(server *Server, conn net.Conn) *Session {
 	s := &Session{
-		logger:         server.logger.Named(conn.RemoteAddr().String()),
-		server:         server,
-		rawConn:        conn,
-		cryptConn:      network.NewCryptConn(conn),
-		sendPackets:    make(chan []byte, 20),
-		clientContext:  &clientctx.ClientContext{},
+		logger:      server.logger.Named(conn.RemoteAddr().String()),
+		server:      server,
+		rawConn:     conn,
+		cryptConn:   network.NewCryptConn(conn),
+		sendPackets: make(chan []byte, 20),
+		clientContext: &clientctx.ClientContext{
+			StrConv: &stringsupport.StringConverter{
+				Encoding: japanese.ShiftJIS,
+			},
+		},
 		stageMoveStack: stringstack.New(),
 	}
 	return s
