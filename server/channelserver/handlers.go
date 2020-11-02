@@ -1127,11 +1127,12 @@ func dumpSaveData(s *Session, data []byte, suffix string) {
 		return
 	}
 
-	err := ioutil.WriteFile(fmt.Sprintf(
-		"%s\\%d%s.bin",
-		s.server.erupeConfig.DevModeOptions.SaveDumps.OutputDir, time.Now().Unix(), suffix), data,
-		0644,
-	)
+	// Try to create savedata folder, ignore errors (e.g. already exists).
+	_ = os.Mkdir(s.server.erupeConfig.DevModeOptions.SaveDumps.OutputDir, os.ModeDir)
+
+	// Build crossplatform filepath.
+	path := filepath.Join(s.server.erupeConfig.DevModeOptions.SaveDumps.OutputDir, fmt.Sprintf("%d%s.bin", time.Now().Unix(), suffix))
+	err := ioutil.WriteFile(path, data, 0644)
 
 	if err != nil {
 		s.logger.Fatal("Error dumping savedata", zap.Error(err))
