@@ -69,13 +69,13 @@ Then, modify the the `/launcher/js/launcher.js` file as such:
 Finally, edit the config.json and set `UseOriginalLauncherFiles` to `true` under the launcher settings.
 
 # Usage
-### Note: If you are switching to/from the custom launcher html, you will have to clear your IE cache @ `C:\Users\<user>\AppData\Local\Microsoft\Windows\INetCache`.
 
 ## Server
 ```
 cd Erupe
 go run .
 ```
+**Note**: If you experience port-binding issues and have Hyper-V/wsl2 installed, please see [this issue](https://github.com/Andoryuuta/Erupe/issues/34).
 
 ## Client
 Add to hosts:
@@ -88,3 +88,5 @@ Add to hosts:
 ```
 
 Run mhf.exe normally (with locale emulator or appropriate timezone).
+
+**Note**: If you are switching to/from the custom launcher html, you will have to clear your IE cache @ `C:\Users\<user>\AppData\Local\Microsoft\Windows\INetCache`.
