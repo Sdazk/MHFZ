@@ -36,12 +36,10 @@ type ClientRight struct {
 
 // MsgSysUpdateRight represents the MSG_SYS_UPDATE_RIGHT
 type MsgSysUpdateRight struct {
-	Unk0 uint32
-	Unk1 uint32
-	//RightCount uint16
-	//Unk3       uint16 // Likely struct padding
-	Rights  []ClientRight
-	UnkSize uint16 // Count of some buf up to 0x800 bytes following it.
+	ClientRespAckHandle uint32 // If non-0, requests the client to send back a MSG_SYS_ACK packet with this value.
+	Unk1                uint32
+	Rights              []ClientRight
+	UnkSize             uint16 // Count of some buf up to 0x800 bytes following it.
 }
 
 // Opcode returns the ID associated with this packet type.
@@ -56,7 +54,7 @@ func (m *MsgSysUpdateRight) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Client
 
 // Build builds a binary packet from the current data.
 func (m *MsgSysUpdateRight) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	bf.WriteUint32(m.Unk0)
+	bf.WriteUint32(m.ClientRespAckHandle)
 	bf.WriteUint32(m.Unk1)
 	bf.WriteUint16(uint16(len(m.Rights)))
 	bf.WriteUint16(0) // m.Unk3, struct padding.
@@ -65,6 +63,9 @@ func (m *MsgSysUpdateRight) Build(bf *byteframe.ByteFrame, ctx *clientctx.Client
 		bf.WriteUint16(v.Unk0)
 		bf.WriteUint32(v.Timestamp)
 	}
-	bf.WriteUint16(m.UnkSize)
+
+	bf.WriteUint16(m.UnkSize) // String of upto 0x800 bytes, update client login token / password in the game's launcherstate struct.
+	//bf.WriteBytes(m.UpdatedClientLoginToken)
+
 	return nil
 }
