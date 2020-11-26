@@ -1,8 +1,6 @@
 package mhfpacket
 
 import (
-	"errors"
-
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -11,6 +9,7 @@ import (
 // MsgMhfAcquireDistItem represents the MSG_MHF_ACQUIRE_DIST_ITEM
 type MsgMhfAcquireDistItem struct {
 	AckHandle uint32
+
 	// Valid field size(s), not sure about the types.
 	Unk0 uint8
 	Unk1 uint32
@@ -31,5 +30,8 @@ func (m *MsgMhfAcquireDistItem) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Cl
 
 // Build builds a binary packet from the current data.
 func (m *MsgMhfAcquireDistItem) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	return errors.New("Not implemented")
+	bf.WriteUint32(m.AckHandle)
+	bf.WriteUint8(m.Unk0)
+	bf.WriteUint32(m.Unk1)
+	return nil
 }

@@ -1,8 +1,6 @@
 package mhfpacket
 
 import (
-	"errors"
-
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -30,5 +28,8 @@ func (m *MsgMhfEnumerateEvent) Parse(bf *byteframe.ByteFrame, ctx *clientctx.Cli
 
 // Build builds a binary packet from the current data.
 func (m *MsgMhfEnumerateEvent) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	return errors.New("Not implemented")
+	bf.WriteUint32(m.AckHandle)
+	bf.WriteUint16(m.Unk0)
+	bf.WriteUint16(m.Unk1)
+	return nil
 }

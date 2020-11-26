@@ -1,8 +1,6 @@
 package mhfpacket
 
 import (
-	"errors"
-
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -18,7 +16,8 @@ func (m *MsgSysCleanupObject) Opcode() network.PacketID {
 
 // Parse parses the packet from binary
 func (m *MsgSysCleanupObject) Parse(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	return errors.New("Not implemented")
+	// This packet has no data.
+	return nil
 }
 
 // Build builds a binary packet from the current data.
