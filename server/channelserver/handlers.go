@@ -79,8 +79,8 @@ func doAckSimpleFail(s *Session, ackHandle uint32, data []byte) {
 
 func updateRights(s *Session) {
 	update := &mhfpacket.MsgSysUpdateRight{
-		Unk0: 0,
-		Unk1: 0x0E, //0e with normal sub 4e when having premium it's probably a bitfield?
+		ClientRespAckHandle: 0,
+		Unk1:                0x0E, //0e with normal sub 4e when having premium it's probably a bitfield?
 		// 01 = Character can take quests at allows
 		// 02 = Hunter Life, normal quests core sub
 		// 03 = Extra Course, extra quests, town boxes, QOL course, core sub

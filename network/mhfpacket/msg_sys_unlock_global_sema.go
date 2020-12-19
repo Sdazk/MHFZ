@@ -1,8 +1,6 @@
 package mhfpacket
 
 import (
-	"errors"
-
 	"github.com/Andoryuuta/Erupe/network"
 	"github.com/Andoryuuta/Erupe/network/clientctx"
 	"github.com/Andoryuuta/byteframe"
@@ -26,5 +24,6 @@ func (m *MsgSysUnlockGlobalSema) Parse(bf *byteframe.ByteFrame, ctx *clientctx.C
 
 // Build builds a binary packet from the current data.
 func (m *MsgSysUnlockGlobalSema) Build(bf *byteframe.ByteFrame, ctx *clientctx.ClientContext) error {
-	return errors.New("Not implemented")
+	bf.WriteUint32(m.AckHandle)
+	return nil
 }
